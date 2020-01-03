@@ -1,5 +1,11 @@
 import script
+import linkedlist
 
+def node_tests():
+    pass
+
+def linkedlist_tests():
+    pass
 
 def piece_tests():
     print("Testing class Piece")
@@ -44,6 +50,8 @@ def snake_tests():
     #assert moved_snake.x == (400 + moved_snake.pieces[0].vel), "snake hasn't moved properly"
 
 def main():
+    node_tests()
+    linkedlist_tests()
     piece_tests()
     snake_tests()
     print("All tests passed!")
