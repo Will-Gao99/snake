@@ -19,7 +19,7 @@ class Node:
         self.val = val
 
     def has_next(self):
-        not self.next == None
+        return not self.next == None
 
     def to_string(self):
         pass
