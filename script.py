@@ -1,6 +1,7 @@
 import pygame
 import os
 import time
+import linkedlist
 
 pygame.font.init()
 
@@ -12,7 +13,7 @@ SNAKE_IMG = pygame.image.load(os.path.join("imgs","snake.png"))
 TARGET_IMG = pygame.image.load(os.path.join("imgs","target.png"))
 BG_IMG = pygame.image.load(os.path.join("imgs","bg.png"))
 
-
+SNAKE_VEL = 20
 STAT_FONT = pygame.font.SysFont("comicsans", 20)
 
 """
@@ -22,42 +23,30 @@ about each individual piece.
 class Piece:
 
     """
-    Initializes an object of class Piece at location (x,y) facing right with
-    velocity 20
+    Initializes an object of class Piece at location (x,y)
     """
     def __init__(self, x, y):
         self.x = x
         self.y = y
-        self.number = 1
-        self.direction = "right"
-        self.vel = 20
         self.img = SNAKE_IMG
 
-    """
-    Changes the piece's location based on the direction it's facing and the
-    piece's velocity
-    """
-    def move(self):
-        if self.direction == "right":
-            self.x += self.vel
-        if self.direction == "left":
-            self.x -= self.vel
-        if self.direction == "up":
-            self.y -= self.vel
-        if self.direction == "down":
-            self.y += self.vel
+    def get_x(self):
+        return self.x
 
-    """
-    Sets the piece's velocity to 0
-    """
-    def freeze(self):
-        self.vel = 0
+    def get_y(self):
+        return self.y
+
+    def set_x(self,x):
+        self.x = x
+
+    def set_y(self,y):
+        self.y = y
 
     """
     Returns a string representation of an object of type Piece
     """
     def to_str(self):
-        string = "[("+ str(self.x) + "," + str(self.y) + "), n=" + str(self.number) + ", " + self.direction + ", velocity=" + str(self.vel) + "]"
+        string = "[("+ str(self.x) + "," + str(self.y) + ")]"
         return string
 
     """
@@ -67,41 +56,35 @@ class Piece:
         win.blit(self.img,(self.x,self.y))
 
 """
-class Snake represents the player controlled snake. Represented by a list of
-pieces
+class Snake represents the player controlled snake. Represented by a linkedlist
+of pieces
 """
-class Snake:
+class Snake(linkedlist.LinkedList):
 
     """
     Initilizes an object of class Snake with inputted length and location
     """
     def __init__(self, length, x, y):
-        self.x = x
-        self.y = y
         self.length = length
-        self.pieces = []
+        self.direction = "right"
+        self.vel = SNAKE_VEL
+        root_node = linkedlist.Node(Piece(x,y))
+        super().__init__(root_node)
+        for n in range(self.length):
+            super().append(linkedlist.Node(Piece(x-(n*20),y)))
 
     """
-    Adds objects of class Piece to self.piece based on self.length
-    """
-    def build(self):
-        for x in range(self.length):
-            self.pieces.append(Piece(self.x-(x*20),self.y))
-
-    """
-    Iterates through the list of pieces and calls move on each of them
+    Changes the position of the first Piece by its velocity and updates the
+    position of the rest of the snake to inherit its predecessor's positions
     """
     def move(self):
-        for n in self.pieces:
-            n.move()
-        self.x = self.pieces[0].x
-        self.y = self.pieces[0].y
+        pass
 
     """
     Returns True if the snake has exited the window and False otherwise
     """
     def exited(self):
-        True if ((self.x < 0) or (self.x > WIN_WIDTH)) or ((self.y<0) or (self.y > WIN_HEIGHT)) else False
+        pass
 
     """
     Returns True if the first piece of the snake has either left the boundaries
@@ -115,17 +98,13 @@ class Snake:
     Returns a string represention of the Snake
     """
     def to_str(self):
-        str = "["
-        for x in self.pieces:
-            str += (x.to_str() + ";")
-        return str + "]"
+        pass
 
     """
     Draws the snake to the window
     """
     def draw(self, win):
-        for n in self.pieces:
-            win.blit(n.img,(n.x,n.y))
+        pass
 
 """
 Draws inputted objects to the window
@@ -138,7 +117,6 @@ def draw_window(win, snake):
 
 def main():
     snake = Snake(4,400,400)
-    snake.build()
     win = pygame.display.set_mode((WIN_WIDTH,WIN_HEIGHT))
     clock = pygame.time.Clock()
     score = 0

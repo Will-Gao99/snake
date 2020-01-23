@@ -18,6 +18,9 @@ class Node:
     def set_val(self, val):
         self.val = val
 
+    """
+    Returns True if this node has a succesor and False otherwise
+    """
     def has_next(self):
         return not self.next == None
 
@@ -41,7 +44,6 @@ class LinkedList:
             else:
                 this_node = this_node.get_next()
 
-
     def prepend(self, v):
         new_node = Node(v, self.root)
         self.root = new_node
@@ -49,6 +51,7 @@ class LinkedList:
 
     def append(self, v):
         self.get_last().set_next(Node(v))
+        self.size += 1
 
     def remove(self, v):
         this_node = self.root
